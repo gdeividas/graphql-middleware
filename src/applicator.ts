@@ -4,6 +4,7 @@ import {
   GraphQLField,
   GraphQLSchema,
   defaultFieldResolver,
+  GraphQLNamedType,
 } from 'graphql'
 import {
   IMiddlewareFunction,
@@ -133,6 +134,10 @@ function applyMiddlewareToType<TSource, TContext, TArgs>(
   }
 }
 
+function isMetaType(type: GraphQLNamedType): boolean {
+  return type.name.startsWith('__')
+}
+
 function applyMiddlewareToSchema<TSource, TContext, TArgs>(
   schema: GraphQLSchema,
   options: IApplyOptions,
@@ -142,6 +147,7 @@ function applyMiddlewareToSchema<TSource, TContext, TArgs>(
 
   const resolvers = Object.keys(typeMap)
     .filter(type => isGraphQLObjectType(typeMap[type]))
+    .filter(type => !isMetaType(typeMap[type]))
     .reduce(
       (resolvers, type) => ({
         ...resolvers,
