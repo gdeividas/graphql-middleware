@@ -1,5 +1,8 @@
 node_modules
-dist
+
+#commenting out for now
+#dist
+
 .idea
 .DS_Store
 *.log*
